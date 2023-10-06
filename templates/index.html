@@ -2,13 +2,56 @@
 <html>
 <head>
     <title>Times</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {background: #e6ffcc}
+    </style>
 </head>
 <body>
-    <h1>Received Times</h1>
-    <ul>
+    <h1>Site A: Received Times</h1>
+    <ul id="times-list">
     {% for time in times %}
         <li>{{ time }}</li>
     {% endfor %}
     </ul>
+
+    <script>
+// Live-update the results after initial page load
+(function(){
+    // set reload interval in milliseconds
+    const RELOAD_TIMEOUT = 5000;
+    // maintain a reference to the times-list element
+    const timeListEl = document.getElementById('times-list');
+
+    // track loading state in case a requests runs too long
+    let loading = false;
+    setInterval(async () => {
+        // exit early if already loading
+        if (loading) {
+            return;
+        }
+        loading = true;
+        try {
+            // request the latest results
+            const resp = await fetch('/latest', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            data = await resp.json();
+            if (data.length) {
+                // replace the current results list with the latest info
+                timeListEl.innerHTML = `<li>${data.join('</li><li>')}</li>`
+            }
+        } catch(e) {
+            // watch out for errors
+            console.error(e);
+        } finally {
+            loading = false
+        }
+    }, RELOAD_TIMEOUT);
+})()
+
+    </script>
 </body>
 </html>

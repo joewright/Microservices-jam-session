@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit the time</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {background: #ffffcc}
+    </style>
+</head>
+<body>
+    {% if already_submitted %}
+    <h1>Site B: Send the time <em>again</em></h1>
+    {% else %}
+    <h1>Site B: Send the time!</h1>
+    {% endif %}
+
+    <form action="/time" method="POST">
+        <input id="time" type="hidden" name="time" value="{{the_time}}">
+        {% if already_submitted %}
+        <marquee behavior="alternate" direction="right">
+            <button type="submit">Send it</button>
+        </marquee>
+        {% else %}
+        <button type="submit">Send it</button>
+        {% endif %}
+    </form>
+</body>
+</html>

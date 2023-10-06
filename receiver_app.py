@@ -1,3 +1,4 @@
+import json
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -17,7 +18,12 @@ def index():
             return render_template('index.html', times=["Not Found"])
         else:
             return render_template('index.html', times=received_times)
-        
+
+
+@app.route('/latest', methods=['GET'])
+def get_latest():
+    return json.dumps(received_times)
+
 def something(item1=int, item2=int) -> int:
     thing = int(input(item1, item2))
     return int(thing)
